@@ -14,7 +14,7 @@
 
 (def where (ref :start))
 
-(defn print-reachable
+(defn get-reachable-str
   "Print reachable locations from current one."
   []
   (loop [reachable (paths @where), locations "Reachable locations:"]
@@ -25,7 +25,7 @@
 (defn look
   "Explore the current location where the character is."
   []
-  (str (@where world) " " (print-reachable)))
+  (str (@where world) " " (get-reachable-str)))
 
 (defn move
   "Move the character from the current location to the specified one."
@@ -40,6 +40,8 @@
 (defn go
   "Go to the desired location (if accessible from where the character is now)."
   [location]
-  (if (and (paths @where) (reachable location))
-    (dosync (ref-set where location))
-    (str "You can't go there from here!")))
+  (if (not (world location))
+    (str "There is no such location! " (get-reachable-str))
+    (if (not (reachable location))
+      (str "You can't go there from here!")
+      (dosync (ref-set where location)))))
