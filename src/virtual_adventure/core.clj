@@ -17,12 +17,16 @@
 (defn look
   "Explore the current location where the character is."
   []
-  (@where world))
+  (str (@where world)
+       (loop [reachable (paths @where), locations " Reachable locations:"]
+         (if (empty? reachable)
+           locations
+           (recur (pop reachable) (str locations " " (name (peek reachable))))))))
 
 (defn move
   "Move the character from the current location to the specified one."
   [location]
-  (dosync (ref-set where location)))
+  )
 
 (defn reachable
   "Returns true if the supplied location is reachable from here."
@@ -33,5 +37,5 @@
   "Go to the desired location (if accessible from where the character is now)."
   [location]
   (if (and (paths @where) (reachable location))
-    (move location)
+    (dosync (ref-set where location))
     (str "You can't go there from here!")))
