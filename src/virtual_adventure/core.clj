@@ -27,11 +27,6 @@
   []
   (str (@where world) " " (get-reachable-str)))
 
-(defn move
-  "Move the character from the current location to the specified one."
-  [location]
-  )
-
 (defn reachable
   "Returns true if the supplied location is reachable from here."
   [location]
