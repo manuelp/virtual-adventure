@@ -14,14 +14,18 @@
 
 (def where (ref :start))
 
+(defn print-reachable
+  "Print reachable locations from current one."
+  []
+  (loop [reachable (paths @where), locations "Reachable locations:"]
+    (if (empty? reachable)
+      locations
+      (recur (pop reachable) (str locations " " (name (peek reachable)))))))
+
 (defn look
   "Explore the current location where the character is."
   []
-  (str (@where world)
-       (loop [reachable (paths @where), locations " Reachable locations:"]
-         (if (empty? reachable)
-           locations
-           (recur (pop reachable) (str locations " " (name (peek reachable))))))))
+  (str (@where world) " " (print-reachable)))
 
 (defn move
   "Move the character from the current location to the specified one."
